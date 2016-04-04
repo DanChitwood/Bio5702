@@ -1,0 +1,473 @@
+---
+title: "Student homework, ggplot2"
+author: "Dan Chitwood"
+date: "April 3, 2016"
+output: word_document
+---
+
+This script is a collection of graphs created by the students of Bio5702, Current Approaches in Plant Research, a graduate course at Washington University in St. Louis. These graphs are explorations of the dataset "candy_nutrition.txt", the nutrition label information from 75 different candy types. The point of this homework assignment was to become acquainted with R, basic statistics, data visualization, and ggplot2. 
+
+
+##Student #1
+
+Begin homework here
+
+```{r}
+library(ggplot2)
+data = read.table ("./candy_nutrition.txt", header=T)
+```
+
+ggplot1, density plot of cholesterol content of different candy
+
+```{r}
+d <- ggplot(data, aes(cholesterol_mg, ..count.., fill = class)) 
+d + geom_density(position = "fill") +
+  scale_fill_brewer(type="div", palette=1, name="class of candy") +
+  scale_colour_brewer(type="div", palette=1, name="class of candy") +
+  xlab(label="cholesterol in mg") +
+  ylab(label="count") +
+  ggtitle("Density plot of total cholesterol colored by candy class")
+```
+
+calories of candy is normalized to its serving_size_g
+
+```{r}
+data$Normalized_cal <- (data$calories/data$serving_size_g)
+```
+
+ggplot2, boxplot of normalized calories of different candy class
+
+```{r}
+d <- ggplot(data, aes(x=class, y=Normalized_cal, colour=class, fill=class))
+d + geom_boxplot(alpha=0.9) +
+  scale_fill_brewer(type="qual", palette=1, name="Classes of candy") +
+  scale_colour_brewer(type="qual", palette=1, name="Classes of candy") +
+  xlab(label="Class of candy") +
+  ylab(label="Calories per gm serving size") +
+  ggtitle("Boxplot of normalized calories colored by candy class") +
+  theme_bw() +
+  theme(axis.text.x=element_text(angle=90))
+```
+
+Normalized fat and carbohydrate
+
+```{r}
+data$Normalized_fat <- (data$total_fat_g/data$serving_size_g)
+data$Normalized_carb <- (data$total_carb_g/data$serving_size_g)
+```
+
+ggplot3, scatterplot of total fat vs. total carbohydrate
+
+```{r}
+d <- ggplot(data, aes(x=Normalized_carb, y=Normalized_fat, colour=class))
+d + geom_point(size=4, alpha=0.8) +
+  scale_fill_brewer(type="qual", palette=1, name="Classes of candy") +
+  scale_colour_brewer(type="qual", palette=1, name="Classes of candy") +
+  xlab(label="Total carbohydrate gm per gm serving size") +
+  ylab(label="Total fat gm per gm serving size") +
+  ggtitle("Fat vs. Carbohydrate") +
+  theme_bw()
+```
+
+##Student #2
+
+Begin homework here
+
+```{r}
+library(ggplot2)
+data = read.table ("./candy_nutrition.txt", header=T)
+```
+
+normalized scatterplot of calories vs fat
+
+```{r}
+data$Calories_per_serving_size = data$calories / data$serving_size_g
+data$fat_per_serving_size = data$total_fat_g / data$serving_size_g
+
+head(data)
+
+p = ggplot(data=data, aes(x=Calories_per_serving_size, y=fat_per_serving_size, colour=class))
+p + geom_point(size=4, alpha=0.5)+ #alpha = transparency of the points
+  scale_fill_brewer(type="qual", palette=5, name="Classes of candy")+
+  xlab(label="Calories")+
+  ylab(label="Total fat (g)")+
+  ggtitle("Fat vs Calories, normalized for serving size")
+```
+
+comparison of saturated fat from different chocolate companies
+
+```{r}
+just_chocolate = subset(data, class=="chocolate")
+
+p = ggplot(data=just_chocolate, aes(x=company, y=saturated_fat_g, fill=company))
+p + geom_boxplot()+
+  xlab(label="Company")+
+  ylab(label="Saturated Fat (g)")+
+  ggtitle("Saturated Fat in the Chocolate from Different Companies")+
+scale_fill_manual(values=c( "green","red", "orange", "yellow", "blue"))
+```
+
+dotplot histogram of sodium content
+
+```{r}
+p = ggplot(data=data, aes(x=sodium_mg, fill=class))
+p + geom_dotplot()+
+  scale_fill_manual(values=c("brown", "green","red", "black", "orange", "yellow", "blue"))+
+  xlab(label="Sodium (mg)")+
+  ylab(label="Fraction of Total Candy")+
+  ggtitle("Dotplot of Sugar content")
+```
+  
+##Student #3
+
+```{r}
+library(ggplot2)
+data <- read.table("./candy_nutrition.txt", header=TRUE)
+```
+
+Let's look at saturated fat versus total fat to get an idea of what percentage saturated fat is in each candy
+
+```{r}
+p <- ggplot(data=data, aes(x=total_fat_g, y=saturated_fat_g, colour=class))
+
+p + geom_point(size=4, alpha=0.7) + 
+  
+  scale_fill_brewer(type="qual", palette=1, name="Classes of candy") + 
+  xlab(label="Total fat in grams") + 
+  ylab(label="Saturated fat in grams") + 
+  ggtitle("Saturated versus total fat") + 
+  theme_bw()
+```
+
+It seems like this mostly follows a regression line of slope 1 so there is more-or-less a 1-to-1 correlation between saturated fat and total fat meaning that for most of these candies, half of the fat is unsaturated
+
+Let's see if there is any correlation between the primary ingredient and the total amount of sugar per serving size
+
+```{r}
+p <- ggplot(data=data, aes(x=primary_ingredient, y=(sugars_g/serving_size_g), colour=class))
+
+p + geom_point(size=4, alpha=0.7) + 
+  
+  scale_fill_brewer(type="qual", palette=1, name="Classes of candy") + 
+  xlab(label="Primary ingredient") + 
+  ylab(label="Grams of sugar per serving") + 
+  ggtitle("Grams of sugar per serving versus primary ingredient") + 
+  theme_bw()
+```
+
+DC: Let's try the same graph with position="jitter"
+
+```{r}
+p + geom_point(size=4, alpha=0.7, position="jitter") + 
+  
+  scale_fill_brewer(type="qual", palette=1, name="Classes of candy") + 
+  xlab(label="Primary ingredient") + 
+  ylab(label="Grams of sugar per serving") + 
+  ggtitle("Grams of sugar per serving versus primary ingredient") + 
+  theme_bw()
+```
+
+Now let's do the same but testing sodium
+
+```{r}
+p <- ggplot(data=data, aes(x=primary_ingredient, y=(sodium_mg/serving_size_g), colour=class))
+
+p + geom_point(size=4, alpha=0.7, position="jitter") + 
+  
+  scale_fill_brewer(type="qual", palette=1, name="Classes of candy") + 
+  xlab(label="Primary ingredient") + 
+  ylab(label="Milligrams of sodium per serving") + 
+  ggtitle("Milligrams of sodium per serving versus primary ingredient") + 
+  theme_bw()
+```
+
+There doesn't seem to be much clustering of the data so there probably isn't a very strong correlation between milligrams of sodium per serving and the type of primary ingredient
+
+What about protein?
+
+```{r}
+p <- ggplot(data=data, aes(x=primary_ingredient, y=(protein_g/serving_size_g), colour=class))
+
+p + geom_point(size=4, alpha=0.7, position="jitter") + 
+  
+  scale_fill_brewer(type="qual", palette=1, name="Classes of candy") + 
+  xlab(label="Primary ingredient") + 
+  ylab(label="Grams of protein per serving") + 
+  ggtitle("Grams of sodium per serving versus primary ingredient") + 
+  theme_bw()
+```
+
+##Student #4
+
+3 PLOTS ASSIGNMENT, due 5pm on 4-3-16
+
+PLOT NUMBER ONE: a bar graph of mean calories per gram for each candy class
+
+upload text document called candy_nutrition.txt by clicking "import dataset" in the Environment window, and choosing From Local File, and finding candy_nutrition.txt
+
+rename candy_nutrition.txt as "data"
+
+```{r}
+library(ggplot2)
+data <- read.table("./candy_nutrition.txt", header=TRUE)
+```
+
+create a new column in the data table that is calories per gram for every candy: divide calories per serving divided by # of grams in serving
+
+```{r}
+data$cals_per_gram <- (data$calories / data$serving_size_g)
+```
+
+then reduce the number of decimal places in my new column down to hundredths, aka 2 decimal places
+
+```{r}
+data$cals_per_gram <- round(data$cals_per_gram, 2)
+```
+
+install ggplots library, and upload the library into my current session
+
+```{r}
+library(ggplot2)
+```
+
+then make a scatterplot where the x-axis is candy name, and the y-axis is the number of calories per gram of each candy
+
+```{r}
+p <- ggplot(data, aes(name,cals_per_gram))
+p + geom_point()
+```
+
+that's ugly and the x-axis labels are unreadable, so intead I'll make a plot where the x-axis is candy class, and y-axis is the mean calories per gram of that class
+
+simply calculating the mean of the cals_per_gram sorted by candy class using tapply gives me a vector, not a data frame
+
+```{r}
+mean_cals_per_gram_by_class <- tapply(data$cals_per_gram, data$class, mean)
+```
+
+look at the output vector by executing this:
+
+```{r}
+mean_cals_per_gram_by_class
+```
+
+the vector looks like this, and lacks column labels which I need to have in order to generate a plot with the axes labeled properly
+   chocolate         gummi    jelly_bean     liquorice peanut_butter          sour         sugar 
+   4.751923      3.504444      3.450000      3.431667      5.020000      3.642857      3.616667 
+
+can I use that "vector" to make a decent scatterplot?
+
+```{r, eval=FALSE}
+p <- ggplot(mean_cals_per_gram_by_class) 
+p + geom_point()
+```
+
+NOPE! Because this "vector" lacks column names and my ggplot command lacks definitions for the x and y axes, I can't make a plot.
+
+Therefore, I need to turn that "vector" into a data.frame
+
+```{r}
+cal_density_by_class <- data.frame(mean_cals_per_gram_by_class)
+```
+
+look at my new data frame
+
+```{r}
+cal_density_by_class
+```
+
+that's nice, but it still doesn't have a column name for candy class
+instead of using "tapply", use "aggregate" to create a data table that puts candy class in its own column
+
+```{r}
+aggregate_test = aggregate(data$cals_per_gram, list(data$class), mean)
+```
+
+look at that new table
+
+```{r}
+aggregate_test
+```
+
+it looks like this:
+        Group.1        x
+1     chocolate 4.751923
+2         gummi 3.504444
+3    jelly_bean 3.450000
+4     liquorice 3.431667
+5 peanut_butter 5.020000
+6          sour 3.642857
+7         sugar 3.616667
+
+now it's in a nice data table format like an excel file, not just a list of numbers like the "vector" was.
+
+now I need to rename the columns from "Group.1" and "x", to "candy_class" and "mean_cals_per_gram" respectively
+
+```{r}
+names(aggregate_test)[1] <- paste("candy_class")
+names(aggregate_test)[2] <- paste("avg_cals_per_gram")
+```
+
+now that I have a dataframe with column names, I'll try turning it into a scatterplot, which ggplot2 calls geom_point
+
+```{r}
+p <- ggplot(aggregate_test, aes(candy_class, avg_cals_per_gram))
+p + geom_point() + 
+  ggtitle(label="Calories per Gram by Candy Class")
+```
+
+I tried to turn this into a bar plot which would have also made the y-axis range start at zero so the values don't look so skewed, but I was unsuccessful. Every attempt I made returned some error.
+
+p <- ggplot(data=aggregate_test, aes(candy_class, avg_cals_per_gram))
+p + geom_bar()
+Error: stat_count() must not be used with a y aesthetic.
+
+That's probably the simplest of my various attempts at achieving a bar plot, but that error message was the main problem I couldn't figure out how to fix.
+
+DC: Let me see if I can help out. You can read here, under ["Details"](http://docs.ggplot2.org/0.9.3.1/geom_bar.html) that by default geom_bar takes count data through stat="bin". Let's change that to stat="identity":
+
+```{r}
+p <- ggplot(data=aggregate_test, aes(candy_class, avg_cals_per_gram))
+p + geom_bar(stat="identity")
+```
+
+So I'll use the tips I found on Quick-R instead of ggplot
+
+```{r}
+density <- table(aggregate_test$candy_class)
+barplot(density, main="Calories per Gram by Candy Class", height=aggregate_test$avg_cals_per_gram, names.arg=(aggregate_test$candy_class), xlab="Candy Class", ylab="Mean Calories Per Gram")
+```
+
+It would be nice to put the values at the ends of each bar, but I couldn't find any tips online for that other than "make a text box and manually enter coordinates until you figure out which coordinates place the text over the desired bar", which sounds sloppy
+
+DC: Let me see if I can help out with that too! I might try geom_text, let's give it a shot! I'll specify x=candy_class and y=avg_cals_per_gram values + 0.1 (so that it dodges the bars). Then, the labels are rounded avg_cals_per_gram values. 
+
+```{r}
+p <- ggplot(data=aggregate_test, aes(candy_class, avg_cals_per_gram))
+p + geom_bar(stat="identity") + geom_text(data=aggregate_test, aes(x=candy_class, y=avg_cals_per_gram+0.1, label=round(avg_cals_per_gram, digits=2)))
+```
+
+PLOT NUMBER TWO: x=primary ingredient, y=calories per gram, color=candy class
+
+```{r}
+p <- ggplot(data, aes(primary_ingredient, cals_per_gram))
+p + geom_jitter(aes(colour = class)) +
+  ggtitle(label = "Calories per Gram by Primary Ingredient") +
+  xlab(label = "Primary Ingredient") +
+  ylab(label = "Calories Per Gram") +
+  ylim(0,6)
+```
+
+PLOT NUMBER THREE: stacked bars showing the % by weight of macronutrient types (total fat, total carbs, total protein) in a serving, sorted by candy class
+
+Make new columns in the dataframe "data" for "percent by weight of fat", "percent by weight of carbs", and "percent by weight of protein"
+
+```{r}
+data$percent_fat_by_weight <- (data$total_fat_g / data$serving_size_g)
+data$percent_carbs_by_weight <- (data$total_carb_g / data$serving_size_g)
+data$percent_protein_by_weight <- (data$protein_g / data$serving_size_g)
+```
+
+round each of them down to a tenth of a percent, then multiply by 100 to get actual percentage values
+
+```{r}
+data$percent_fat_by_weight <- round(data$percent_fat_by_weight, 3) * 100
+data$percent_carbs_by_weight <- round(data$percent_carbs_by_weight, 3) * 100
+data$percent_protein_by_weight <- round(data$percent_protein_by_weight, 3) * 100
+```
+
+that's good, but too many bars to plot on a single chart, so now I need to get the average percent macronutrient values for each candy class
+
+```{r}
+mean_fat_percent <- tapply(data$percent_fat_by_weight, data$class, mean)
+mean_carbs_percent <- tapply(data$percent_carbs_by_weight, data$class, mean)
+mean_protein_percent <- tapply(data$percent_protein_by_weight, data$class, mean)
+```
+
+Check to see if these look reasonable
+
+```{r}
+mean_fat_percent
+mean_carbs_percent
+mean_protein_percent
+```
+
+Now I have vectors listing the mean macronutrient percentages for each candy class. Combine those three vectors into a single dataframe
+
+```{r}
+mean_macronutrient_percents <- data.frame(mean_fat_percent, mean_carbs_percent, mean_protein_percent)
+```
+
+Again, I have the problem where the column listing class doesn't have a title
+
+```{r, eval=FALSE}
+macronutrient_aggregate = aggregate(data$percent_fat_by_weight,percent_carbs_by_weight,percent_protein_by_weight, list(data$class), mean)
+```
+
+The aggregate command didn't work this time maybe because I'm trying to create a dataframe with more than two columns??? So I'll just copy and paste the dataframe into Excel, add the desired column title, copy that into a text file(because apparently Excel files can't upload into R properly), and upload the text file as a new dataframe.
+
+Now I have a dataframe I can work with, so I'll try to make a stacked bar chart from those values
+
+```{r, eval=FALSE}
+p <- ggplot(data = data, aes(x = class, y = percent_fat_by_weight, percent_carbs_by_weight, percent_protein_by_weight))
+p + geom_bar()
+```
+
+That ^^^ doesn't seem to be working, so I'll try to make my chart from the percent ___ by weight values I added to the original dataframe "data"
+
+```{r, eval=FALSE}
+p <- ggplot(data = data, aes(x = class, y = percent_fat_by_weight, percent_carbs_by_weight, percent_protein_by_weight))
+p + geom_bar()
+```
+
+That ^^^ also doesn't work.
+
+```{r, eval=FALSE}
+barplot(text_mean_macronutrient_percents,  main = "Macronutrient Percents by Candy Class", xlab = "Candy Class", ylab = "Percent")
+```
+
+Nope^^^
+
+DC: Let's see what we can do to create this bar graph with stacked percentages
+
+Let's create a smaller dataset with just the class of candy and the percents by weights of fat, carbs, and protein.
+
+```{r}
+names(data)
+
+sub_data <- data[c(4,18:20)]
+```
+
+Next, let's use a function in another package created by Hadley Wickham (creator of ggplot2) called "reshape2", which allows us to reformat our data with ease. What we want to do is put the percents by weight of fat, carbs, and protein into a single column and then create a new column that says what they are (fat, carb, or protein). The function is called "melt", and it collapses your data except for the columns you specify with the argument "id". Let's try it!
+
+```{r}
+names(sub_data)
+
+library(reshape2)
+melted_data <- melt(sub_data, id="class")
+
+names(melted_data)
+head(melted_data)
+```
+
+Great! Now let's try to create that bar plot
+
+```{r}
+p <- ggplot(data = melted_data, aes(x = class, y = value, fill= variable))
+p + geom_bar(stat="identity")
+```
+
+These appear to be unequal because I believe we calcaulted percents fat, carbs, and protein for each candy type within each class of candy? If so, then let's try to normalize to get "percents" for each class
+
+```{r}
+p <- ggplot(data = melted_data, aes(x = class, y = value, fill= variable))
+p + geom_bar(stat="identity", position="fill")
+```
+
+Also, see position="dodge"
+
+```{r}
+p <- ggplot(data = melted_data, aes(x = class, y = value, fill= variable))
+p + geom_bar(stat="identity", position="dodge")
+```
+
