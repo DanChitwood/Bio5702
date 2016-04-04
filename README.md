@@ -23,3 +23,7 @@ The first lecture of this series will be an introduction to the statistical comp
 4. Perform descriptive statistics and initial data explroation
 
 Your homework for the first lecture is to create *three* graphs using ggplot2 that explore the nutritional candy dataset.
+
+## [April 4, 2016](https://github.com/DanChitwood/Bio5702/tree/master/April_4_2016)
+
+The results from the homework assignment to make three [ggplots](http://docs.ggplot2.org/current/) using the [candy_nutrition.txt](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/candy_nutrition.txt) dataset, the nutrition information for 75 different candy types, has been [posted](https://github.com/DanChitwood/Bio5702/tree/master/April_4_2016).
