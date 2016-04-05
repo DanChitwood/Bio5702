@@ -24,14 +24,14 @@ The first lecture of this series will be an introduction to the statistical comp
 
 ## April 1, 2016
 
-The beginning of this lecture we will go over the remainder of the ggplot2 [tutorial](https://rawgit.com/DanChitwood/Bio5702/blob/master/March_30_2016/Intro_to_R.html). Your homework for this lecture is to create three graphs using ggplot2 that explore the nutritional candy dataset. We will go over your ggplot2 in class next lecture.
+The beginning of this lecture we will go over the remainder of the ggplot2 [tutorial](https://github.com/DanChitwood/Bio5702/blob/master/March_30_2016/Intro_to_R.R). Your homework for this lecture is to create three graphs using ggplot2 that explore the nutritional candy dataset. We will go over your ggplot2 graphs in class next lecture.
 
 For the remainder of this lecture, Chris gave a [presentation](http://www.slideshare.net/ChristopherTopp1/2016-bio4025-lecture1-final) introducing image analysis
 
 ## [April 4, 2016](https://github.com/DanChitwood/Bio5702/tree/master/April_4_2016)
 
-The results from the homework assignment to make three [ggplots](http://docs.ggplot2.org/current/) using the [candy_nutrition.txt](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/candy_nutrition.txt) dataset, the nutrition information for 75 different candy types, has been [posted](https://github.com/DanChitwood/Bio5702/tree/master/April_4_2016).
+The results from the homework assignment to make three [ggplots](http://docs.ggplot2.org/current/) using the [candy_nutrition.txt](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/ggplot2_homework/candy_nutrition.txt) dataset, the nutrition information for 75 different candy types, has been [posted](https://github.com/DanChitwood/Bio5702/tree/master/April_4_2016/ggplot2_homework).
 
-You can view the homework in your browser as [html](https://rawgit.com/DanChitwood/Bio5702/master/April_4_2016/student_homework.html) too.
+You can view the homework in your browser as [html](https://rawgit.com/DanChitwood/Bio5702/blob/master/April_4_2016/ggplot2_homework/student_homework.html) too.
 
 Chris continued with the image analysis [presentation](http://www.slideshare.net/ChristopherTopp1/2016-bio4025-lecture1-final) and an [introduction to image analysis in FIJI](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.md). The [FIJI](http://fiji.sc/) introduction is viewable as [markdown](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.md) or downloadable as a [Word file](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.docx).
