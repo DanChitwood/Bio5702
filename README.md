@@ -32,10 +32,14 @@ For the remainder of this lecture, Chris gave a [presentation](http://www.slides
 
 The results from the homework assignment to make three [ggplots](http://docs.ggplot2.org/current/) using the [candy_nutrition.txt](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/ggplot2_homework/candy_nutrition.txt) dataset, the nutrition information for 75 different candy types, has been [posted](https://github.com/DanChitwood/Bio5702/tree/master/April_4_2016/ggplot2_homework).
 
-You can view the homework in your browser as [html](https://rawgit.com/DanChitwood/Bio5702/blob/master/April_4_2016/ggplot2_homework/student_homework.html) too.
+You can view the homework in your browser as [html](https://cdn.rawgit.com/DanChitwood/Bio5702/master/April_4_2016/student_homework.html) too.
 
 Chris continued with the image analysis [presentation](http://www.slideshare.net/ChristopherTopp1/2016-bio4025-lecture1-final) and an [introduction to image analysis in FIJI](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.md). The [FIJI](http://fiji.sc/) introduction is viewable as [markdown](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.md) or downloadable as a [Word file](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.docx).
 
 ## April 6, 2016
 
+<<<<<<< HEAD
 Phenotyping went great today! Chris has posted all your photos to DropBox, but another place to find all the raw data is [here](https://goo.gl/photos/Q1PCugeqmrwrcyir8). Homework for Friday is to cull duplicate/bad pictures and rename the files with the identification numbers before 10am on Friday. On Friday, you will use FIJI to make masks and gather data (feature extraction).
+=======
+Phenotyping went great today! Chris has posted all your photos to [DropBox](https://www.dropbox.com/sh/uzg7iv9d3e8ev1p/AAD-ipam19wSXWn9HJ8Q8x-La?dl=0). Homework for Friday is to cull duplicate/bad pictures and rename the files with the identification numbers before 10am on Friday. On Friday, you will use FIJI to make masks and gather data (feature extraction).
+>>>>>>> origin/master
