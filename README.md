@@ -50,6 +50,6 @@ Introduction to Principal Component Analysis (PCA), hierarchical clustering, and
 
 ## [April 15, 2016](https://github.com/DanChitwood/Bio5702/tree/master/April_15_2016)
 
-Class was spent going over the [homework](https://raw.githubusercontent.com/DanChitwood/Bio5702/master/April_15_2016/MASTER_SCRIPT.html)!!! Great job everyone!
+Class was spent going over the [homework](https://rawgit.com/DanChitwood/Bio5702/master/April_15_2016/MASTER_SCRIPT.html)!!! Great job everyone!
 
 
