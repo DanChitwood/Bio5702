@@ -1,0 +1,271 @@
+---
+title: 'BIO5702: Student homework for the #CandyPhenotyping module'
+author: "Dan Chitwood"
+date: "April 17, 2016"
+output: word_document
+---
+
+The following is unaltered homework exploring the multivariate nutrition, shape, and color information from 75 different candy types and 980 individual candy pieces. It was written by the students of Bio5702, a graduate course at Washington University in St. Louis, "Current Approaches in Plant Research".
+
+So I have the tab delimited file of all the color and shape data called `Color_Data_all`
+
+That file has the color information for each region of interest split into 3 rows; e.g. image 1's ROI 1 will have a Red row, Green row, and Blue row.
+
+What I need to do is create a new dataframe that instead of having each ROI with those 3 rows, we want only one row for each ROI, and 3 columns each with the pertinent Red, Green, and Blue intensity.
+
+* E.g. instead of:
+
+`ID     color   value`
+
+`id01   red     00`
+
+`id01   green   00`
+
+`id01   blue    00`
+
+* We want this:
+
+`id   red   green   blue`
+
+`01   00     00       00`
+
+R Reshape  example:
+
+```{r}
+library(reshape2)
+```
+
+1. First, melt the data, `newdata <- melt(data, id=c("RATING", "TIME_TO_MATURITY", "INDUSTRY_CODE", "BOND_TYPE"))`;
+
+2. Second, cast the data based on your needs, for instance, to get the total amount of each industry, `cast(newdata, INDUSTRY_CODE ~ variable, sum)` returns you a `data.frame` 
+
+Read in my data properly
+
+```{r}
+allcolordata <- read.table("./Color_Data_all_with_color.txt", header=TRUE)
+```
+
+Okay, so to apply that to our information, first I want to create a new `data.frame` with only the candy id and ROI id, the color column, and the color's intensity 
+
+```{r}
+subset_colors<- allcolordata[c(1:6, 11:15)]
+```
+
+Now I want to "unstack" my "long format" data into "wide format" meaning the 3 rows per ROI need to be collapsed into a single row, but with 3 columns for the mean values of each color.
+
+Example of long format:
+
+`  Subject Gender   Test Resul`
+
+`1       1      M   Read     10`
+
+`2       2      F  Write      4`
+
+`3       1      M  Write      8`
+
+`4       2      F Listen      6`
+
+`5       2      F   Read      7`
+
+`6       1      M Listen      7`
+
+Example of command to turn into wide format:
+
+`wide_format <- unstack(observations_long, Result ~ Test)`
+
+`wide_format`
+
+`  Listen Read Write`
+
+` 1      6   10     4`
+
+` 2      7    7     8`
+
+`wide_color <- unstack(mastercolor, Mean ~ Color)`
+
+Now look at my new table
+
+`wide_color`
+
+***That didn't work at all.***
+
+Let's try another approach to do the same thing, convert long format into wide format, using `reshape()`
+
+First download the "stats" command library
+
+```{r}
+library(stats)
+```
+
+now create a "wide format" dataframe from my smaller dataframe that
+
+```{r}
+color_to_wide <- reshape(subset_colors, timevar = "Color", idvar = c("Label", "ID"), direction = "wide")
+```
+
+Open that text file in Excel, open as space delimited, and fix the fact that the very top row is shifted left by one cell. Make sure that the columnname ID is over the actual candy IDs, not the number values added by R that span from 1 to 3518
+
+Okay, the file we just made has color words added to a bunch of the column names that don't need to be there, so we'll manually delete those.
+
+Also, manually delete all the duplicate columns, e.g. Solidity.Red, Solidity.Green, etc. (eveything except Mean.Red, Mean.Green, Mean.Blue)
+
+Open that file that contains both the color and shape data
+
+```{r}
+shape_color_wide <- read.table("./widedata.txt", header=T)
+```
+
+Open the nutrition information that has the ID's all capitalized
+```{r}
+nutrition_facts <- read.table("./candy_nutrition_415.txt", header=T)
+```
+
+Now merge those two data.frames
+
+```{r}
+merged_color_shape_nutrition <- merge(x=shape_color_wide, y=nutrition_facts, by.x = "ID", by.y = "ID", all.x=TRUE)
+```
+
+Now load all the libraries needed for the principle component analysis and graph making
+
+```{r}
+library(ggplot2)
+library(ggrepel)
+library(ggdendro)
+library(ape)
+```
+
+Now normalize all the nutrition information to the grams per serving size
+
+```{r}
+merged_color_shape_nutrition$total_fat_per_serv <- merged_color_shape_nutrition$total_fat_g/merged_color_shape_nutrition$serving_size_g
+merged_color_shape_nutrition$saturated_fat_per_serv <- merged_color_shape_nutrition$saturated_fat_g/merged_color_shape_nutrition$serving_size_g
+merged_color_shape_nutrition$cholesterol_per_serv <- merged_color_shape_nutrition$cholesterol_mg/merged_color_shape_nutrition$serving_size_g
+merged_color_shape_nutrition$sodium_per_serv <- merged_color_shape_nutrition$sodium_mg/merged_color_shape_nutrition$serving_size_g
+merged_color_shape_nutrition$total_carb_per_serv <- merged_color_shape_nutrition$total_carb_g/merged_color_shape_nutrition$serving_size_g
+merged_color_shape_nutrition$dietary_fiber_per_serv <- merged_color_shape_nutrition$dietary_fiber_g/merged_color_shape_nutrition$serving_size_g
+merged_color_shape_nutrition$sugars_per_serv <- merged_color_shape_nutrition$sugars_g/merged_color_shape_nutrition$serving_size_g
+merged_color_shape_nutrition$protein_per_serv <- merged_color_shape_nutrition$protein_g/merged_color_shape_nutrition$serving_size_g
+```
+
+First we'll do a principle component analysis and make plots based on ALL the information in our dataframe.
+
+Now we're going to center and scale our data, only the quantitative columns, excluding slice because that value is always 1, and excluding the non-normalized nutrition information.
+
+```{r}
+pca <- prcomp(merged_color_shape_nutrition[c(4:5, 7:12, 28:35)], center = TRUE, scale. = TRUE)
+```
+
+Look at the PC analysis summary
+
+```{r}
+summary(pca)
+```
+
+Look at it. The PC# column that has the largest value in the Proportion of Variance row is the PC that we want to use.
+
+```{r}
+pca$rotation
+```
+
+This is neat to look at but we don't really need it, because the PC1 and PC2 are going to be our x and y axes, at least for our first graphs.
+
+Now we want to get the PC scores, look at them, and bind those PC scores with the original data
+
+```{r}
+scores <- as.data.frame(pca$x)
+pca_scores <- cbind(merged_color_shape_nutrition, scores)
+```
+
+Now plot our candy information using PC1 and PC2
+
+```{r}
+p <- ggplot(pca_scores, aes(PC1, PC2, colour=class))
+p + geom_point(size=5, alpha=0.6) + scale_colour_brewer(type="qual", palette = 2)
+```
+
+Now we'll make the point the mean colors of the actual candies
+
+```{r}
+p <- ggplot(pca_scores, aes(PC1, PC2, colour=rgb(Mean.Red, Mean.Green, Mean.Blue, maxColorValue = 255)))
+p + geom_point(size=5, alpha=0.6) + scale_color_identity()
+```
+
+Second, we'll do a principle component analysis based only on the shape information.
+
+```{r}
+shape_pca <- prcomp(merged_color_shape_nutrition[c(4:5,7:9)], center = TRUE, scale. = TRUE)
+
+summary(shape_pca)
+
+shape_pca$rotation
+
+shape_scores <- as.data.frame(shape_pca$x)
+shape_pca_scores <- cbind(merged_color_shape_nutrition, shape_scores)
+
+p <- ggplot(shape_pca_scores, aes(PC1, PC2, colour=class))
+p + geom_point(size=3, alpha=0.6) + scale_colour_brewer(type="qual", palette = 2)
+```
+
+
+Now we'll do a principle component analysis based only on the color information
+
+```{r}
+color_pca <- prcomp(merged_color_shape_nutrition[c(10:12)], center = TRUE, scale. = TRUE)
+
+summary(color_pca)
+
+color_pca$rotation
+
+shape_scores <- as.data.frame(color_pca$x)
+color_pca_scores <- cbind(merged_color_shape_nutrition, shape_scores)
+
+p <- ggplot(color_pca_scores, aes(PC1, PC2, colour=class))
+p + geom_point(size=3, alpha=0.6) + scale_colour_brewer(type="qual", palette = 2)
+```
+
+This would look really cool using the actual candy colors.
+
+```{r}
+p <- ggplot(color_pca_scores, aes(PC1, PC2, colour=rgb(Mean.Red, Mean.Green, Mean.Blue, maxColorValue = 255)))
+p + geom_point(size=5, alpha=0.6) + scale_color_identity()
+```
+
+Now do a principle component analysis on the nutrition information
+
+```{r}
+nutrition_pca <- prcomp(merged_color_shape_nutrition[c(28:35)], center = TRUE, scale. = TRUE)
+
+summary(nutrition_pca)
+
+nutrition_pca$rotation
+
+shape_scores <- as.data.frame(nutrition_pca$x)
+nutrition_pca_scores <- cbind(merged_color_shape_nutrition, shape_scores)
+
+p <- ggplot(nutrition_pca_scores, aes(PC1, PC2, colour=class))
+p + geom_point(size=3, alpha=0.6) + scale_colour_brewer(type="qual", palette = 2)
+```
+
+#HIERARCHICAL CLUSTERING TIME
+
+```{r}
+scaled_everything <- scale(merged_color_shape_nutrition[c(4:5, 7:12, 28:35)])
+scaled_candies <- scale(t(scaled_everything))
+colnames(scaled_candies) <- as.matrix(merged_color_shape_nutrition[2])
+
+corell_nutrition <- cor(scaled_everything, method="spearman")
+corell_candies <- cor(scaled_candies, method="spearman")
+
+dist_nutrition <- as.dist(1-abs(corell_nutrition))
+dist_candies <- as.dist(1-abs(corell_candies))
+
+hc_nutrition <- hclust(dist_nutrition, method="ward.D2")
+hc_candies <- hclust(dist_candies, method="ward.D2")
+
+plot(hc_nutrition, cex=0.8)
+plot(hc_candies, cex=0.8)
+
+plot(as.phylo(hc_nutrition), type="cladogram", label.offset=0.01)
+plot(as.phylo(hc_candies), type="cladogram", label.offset=0.01, cex=0.5)
+```

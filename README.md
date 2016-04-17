@@ -35,3 +35,7 @@ The results from the homework assignment to make three [ggplots](http://docs.ggp
 You can view the homework in your browser as [html](https://rawgit.com/DanChitwood/Bio5702/blob/master/April_4_2016/ggplot2_homework/student_homework.html) too.
 
 Chris continued with the image analysis [presentation](http://www.slideshare.net/ChristopherTopp1/2016-bio4025-lecture1-final) and an [introduction to image analysis in FIJI](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.md). The [FIJI](http://fiji.sc/) introduction is viewable as [markdown](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.md) or downloadable as a [Word file](https://github.com/DanChitwood/Bio5702/blob/master/April_4_2016/2016_FIJI_GettingStarted.docx).
+
+## April 6, 2016
+
+Phenotyping went great today! Chris has posted all your photos to DropBox, but another place to find all the raw data is [here](https://goo.gl/photos/Q1PCugeqmrwrcyir8). Homework for Friday is to cull duplicate/bad pictures and rename the files with the identification numbers before 10am on Friday. On Friday, you will use FIJI to make masks and gather data (feature extraction).
