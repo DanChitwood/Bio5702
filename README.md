@@ -38,8 +38,18 @@ Chris continued with the image analysis [presentation](http://www.slideshare.net
 
 ## April 6, 2016
 
-<<<<<<< HEAD
 Phenotyping went great today! Chris has posted all your photos to DropBox, but another place to find all the raw data is [here](https://goo.gl/photos/Q1PCugeqmrwrcyir8). Homework for Friday is to cull duplicate/bad pictures and rename the files with the identification numbers before 10am on Friday. On Friday, you will use FIJI to make masks and gather data (feature extraction).
-=======
-Phenotyping went great today! Chris has posted all your photos to [DropBox](https://www.dropbox.com/sh/uzg7iv9d3e8ev1p/AAD-ipam19wSXWn9HJ8Q8x-La?dl=0). Homework for Friday is to cull duplicate/bad pictures and rename the files with the identification numbers before 10am on Friday. On Friday, you will use FIJI to make masks and gather data (feature extraction).
->>>>>>> origin/master
+
+## April 8 and April 11, 2016
+
+Chris spent more time lecturing about image analysis and students spent time in class learning about image stacks, batch processing, ROIs, masks, and isolating colorimetric and shape descriptor information for images in FIJI.
+
+## [April 13, 2016](https://github.com/DanChitwood/Bio5702/tree/master/April_13_2016)
+
+Introduction to Principal Component Analysis (PCA), hierarchical clustering, and other multivariate statistical methods. The lecture can be found [here](https://rawgit.com/DanChitwood/Bio5702/master/April_13_2016/candy_multivariate.html).
+
+## [April 15, 2016](https://github.com/DanChitwood/Bio5702/tree/master/April_15_2016)
+
+Class was spent going over the [homework](https://raw.githubusercontent.com/DanChitwood/Bio5702/master/April_15_2016/MASTER_SCRIPT.html)!!! Great job everyone!
+
+
